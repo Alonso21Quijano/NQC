@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		120D478820A62CF900BEDEDF /* Boards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 120D478720A62CF900BEDEDF /* Boards.swift */; };
 		12281631209B53E8009C3E63 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12281630209B53E8009C3E63 /* AppDelegate.swift */; };
-		12281633209B53E8009C3E63 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 12281632209B53E8009C3E63 /* GameScene.sks */; };
 		12281635209B53E8009C3E63 /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = 12281634209B53E8009C3E63 /* Actions.sks */; };
 		12281637209B53E8009C3E63 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12281636209B53E8009C3E63 /* GameScene.swift */; };
 		12281639209B53E8009C3E63 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12281638209B53E8009C3E63 /* GameViewController.swift */; };
@@ -17,6 +17,23 @@
 		12281641209B53E8009C3E63 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1228163F209B53E8009C3E63 /* LaunchScreen.storyboard */; };
 		1228164C209B53E9009C3E63 /* Quantum_ChessTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1228164B209B53E9009C3E63 /* Quantum_ChessTests.swift */; };
 		12281657209B53E9009C3E63 /* Quantum_ChessUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12281656209B53E9009C3E63 /* Quantum_ChessUITests.swift */; };
+		12281665209B546D009C3E63 /* Figures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12281664209B546D009C3E63 /* Figures.swift */; };
+		12281690209B5560009C3E63 /* b_king.png in Resources */ = {isa = PBXBuildFile; fileRef = 12281682209B555F009C3E63 /* b_king.png */; };
+		12281691209B5560009C3E63 /* w_queen.png in Resources */ = {isa = PBXBuildFile; fileRef = 12281683209B555F009C3E63 /* w_queen.png */; };
+		12281692209B5560009C3E63 /* w_rook.png in Resources */ = {isa = PBXBuildFile; fileRef = 12281684209B555F009C3E63 /* w_rook.png */; };
+		12281693209B5560009C3E63 /* w_pawn.png in Resources */ = {isa = PBXBuildFile; fileRef = 12281685209B555F009C3E63 /* w_pawn.png */; };
+		12281694209B5560009C3E63 /* b_horse.png in Resources */ = {isa = PBXBuildFile; fileRef = 12281686209B555F009C3E63 /* b_horse.png */; };
+		12281695209B5560009C3E63 /* b_pawn.png in Resources */ = {isa = PBXBuildFile; fileRef = 12281687209B555F009C3E63 /* b_pawn.png */; };
+		12281696209B5560009C3E63 /* testfig.png in Resources */ = {isa = PBXBuildFile; fileRef = 12281688209B555F009C3E63 /* testfig.png */; };
+		12281697209B5560009C3E63 /* w_horse.png in Resources */ = {isa = PBXBuildFile; fileRef = 12281689209B555F009C3E63 /* w_horse.png */; };
+		12281698209B5560009C3E63 /* w_king.png in Resources */ = {isa = PBXBuildFile; fileRef = 1228168A209B555F009C3E63 /* w_king.png */; };
+		12281699209B5560009C3E63 /* b_bishop.png in Resources */ = {isa = PBXBuildFile; fileRef = 1228168B209B555F009C3E63 /* b_bishop.png */; };
+		1228169A209B5560009C3E63 /* b_queen.png in Resources */ = {isa = PBXBuildFile; fileRef = 1228168C209B5560009C3E63 /* b_queen.png */; };
+		1228169B209B5560009C3E63 /* b_rook.png in Resources */ = {isa = PBXBuildFile; fileRef = 1228168D209B5560009C3E63 /* b_rook.png */; };
+		1228169C209B5560009C3E63 /* TestBoard.png in Resources */ = {isa = PBXBuildFile; fileRef = 1228168E209B5560009C3E63 /* TestBoard.png */; };
+		1228169D209B5560009C3E63 /* w_bishop.png in Resources */ = {isa = PBXBuildFile; fileRef = 1228168F209B5560009C3E63 /* w_bishop.png */; };
+		122D744320A648D500EED457 /* w_win.png in Resources */ = {isa = PBXBuildFile; fileRef = 122D744120A648D500EED457 /* w_win.png */; };
+		122D744420A648D500EED457 /* b_win.png in Resources */ = {isa = PBXBuildFile; fileRef = 122D744220A648D500EED457 /* b_win.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,9 +54,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		120D478720A62CF900BEDEDF /* Boards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Boards.swift; sourceTree = "<group>"; };
 		1228162D209B53E8009C3E63 /* Quantum Chess.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Quantum Chess.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		12281630209B53E8009C3E63 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		12281632209B53E8009C3E63 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
 		12281634209B53E8009C3E63 /* Actions.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Actions.sks; sourceTree = "<group>"; };
 		12281636209B53E8009C3E63 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		12281638209B53E8009C3E63 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
@@ -53,6 +70,23 @@
 		12281652209B53E9009C3E63 /* Quantum ChessUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Quantum ChessUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		12281656209B53E9009C3E63 /* Quantum_ChessUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Quantum_ChessUITests.swift; sourceTree = "<group>"; };
 		12281658209B53E9009C3E63 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		12281664209B546D009C3E63 /* Figures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Figures.swift; sourceTree = "<group>"; };
+		12281682209B555F009C3E63 /* b_king.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = b_king.png; sourceTree = "<group>"; };
+		12281683209B555F009C3E63 /* w_queen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = w_queen.png; sourceTree = "<group>"; };
+		12281684209B555F009C3E63 /* w_rook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = w_rook.png; sourceTree = "<group>"; };
+		12281685209B555F009C3E63 /* w_pawn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = w_pawn.png; sourceTree = "<group>"; };
+		12281686209B555F009C3E63 /* b_horse.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = b_horse.png; sourceTree = "<group>"; };
+		12281687209B555F009C3E63 /* b_pawn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = b_pawn.png; sourceTree = "<group>"; };
+		12281688209B555F009C3E63 /* testfig.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = testfig.png; sourceTree = "<group>"; };
+		12281689209B555F009C3E63 /* w_horse.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = w_horse.png; sourceTree = "<group>"; };
+		1228168A209B555F009C3E63 /* w_king.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = w_king.png; sourceTree = "<group>"; };
+		1228168B209B555F009C3E63 /* b_bishop.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = b_bishop.png; sourceTree = "<group>"; };
+		1228168C209B5560009C3E63 /* b_queen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = b_queen.png; sourceTree = "<group>"; };
+		1228168D209B5560009C3E63 /* b_rook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = b_rook.png; sourceTree = "<group>"; };
+		1228168E209B5560009C3E63 /* TestBoard.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TestBoard.png; sourceTree = "<group>"; };
+		1228168F209B5560009C3E63 /* w_bishop.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = w_bishop.png; sourceTree = "<group>"; };
+		122D744120A648D500EED457 /* w_win.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = w_win.png; sourceTree = "<group>"; };
+		122D744220A648D500EED457 /* b_win.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = b_win.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,8 +137,23 @@
 		1228162F209B53E8009C3E63 /* Quantum Chess */ = {
 			isa = PBXGroup;
 			children = (
+				122D744220A648D500EED457 /* b_win.png */,
+				122D744120A648D500EED457 /* w_win.png */,
+				1228168B209B555F009C3E63 /* b_bishop.png */,
+				12281686209B555F009C3E63 /* b_horse.png */,
+				12281682209B555F009C3E63 /* b_king.png */,
+				12281687209B555F009C3E63 /* b_pawn.png */,
+				1228168C209B5560009C3E63 /* b_queen.png */,
+				1228168D209B5560009C3E63 /* b_rook.png */,
+				1228168E209B5560009C3E63 /* TestBoard.png */,
+				12281688209B555F009C3E63 /* testfig.png */,
+				1228168F209B5560009C3E63 /* w_bishop.png */,
+				12281689209B555F009C3E63 /* w_horse.png */,
+				1228168A209B555F009C3E63 /* w_king.png */,
+				12281685209B555F009C3E63 /* w_pawn.png */,
+				12281683209B555F009C3E63 /* w_queen.png */,
+				12281684209B555F009C3E63 /* w_rook.png */,
 				12281630209B53E8009C3E63 /* AppDelegate.swift */,
-				12281632209B53E8009C3E63 /* GameScene.sks */,
 				12281634209B53E8009C3E63 /* Actions.sks */,
 				12281636209B53E8009C3E63 /* GameScene.swift */,
 				12281638209B53E8009C3E63 /* GameViewController.swift */,
@@ -112,6 +161,8 @@
 				1228163D209B53E8009C3E63 /* Assets.xcassets */,
 				1228163F209B53E8009C3E63 /* LaunchScreen.storyboard */,
 				12281642209B53E8009C3E63 /* Info.plist */,
+				12281664209B546D009C3E63 /* Figures.swift */,
+				120D478720A62CF900BEDEDF /* Boards.swift */,
 			);
 			path = "Quantum Chess";
 			sourceTree = "<group>";
@@ -241,11 +292,26 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				12281697209B5560009C3E63 /* w_horse.png in Resources */,
 				1228163C209B53E8009C3E63 /* Main.storyboard in Resources */,
-				12281633209B53E8009C3E63 /* GameScene.sks in Resources */,
+				12281699209B5560009C3E63 /* b_bishop.png in Resources */,
+				1228169C209B5560009C3E63 /* TestBoard.png in Resources */,
 				1228163E209B53E8009C3E63 /* Assets.xcassets in Resources */,
 				12281641209B53E8009C3E63 /* LaunchScreen.storyboard in Resources */,
+				1228169D209B5560009C3E63 /* w_bishop.png in Resources */,
+				12281693209B5560009C3E63 /* w_pawn.png in Resources */,
+				12281698209B5560009C3E63 /* w_king.png in Resources */,
+				12281691209B5560009C3E63 /* w_queen.png in Resources */,
 				12281635209B53E8009C3E63 /* Actions.sks in Resources */,
+				12281692209B5560009C3E63 /* w_rook.png in Resources */,
+				12281696209B5560009C3E63 /* testfig.png in Resources */,
+				122D744320A648D500EED457 /* w_win.png in Resources */,
+				1228169B209B5560009C3E63 /* b_rook.png in Resources */,
+				12281694209B5560009C3E63 /* b_horse.png in Resources */,
+				1228169A209B5560009C3E63 /* b_queen.png in Resources */,
+				12281690209B5560009C3E63 /* b_king.png in Resources */,
+				12281695209B5560009C3E63 /* b_pawn.png in Resources */,
+				122D744420A648D500EED457 /* b_win.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -270,7 +336,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				120D478820A62CF900BEDEDF /* Boards.swift in Sources */,
 				12281637209B53E8009C3E63 /* GameScene.swift in Sources */,
+				12281665209B546D009C3E63 /* Figures.swift in Sources */,
 				12281639209B53E8009C3E63 /* GameViewController.swift in Sources */,
 				12281631209B53E8009C3E63 /* AppDelegate.swift in Sources */,
 			);
