@@ -16,6 +16,7 @@ class quant_board
     var r_rook_move: [Bool] = [false, false]
     var l_rook_move: [Bool] = [false, false]
     var king_move: [Bool] = [false, false]
+    
     init()
     {
         for _ in 0..<8
@@ -23,6 +24,7 @@ class quant_board
             self.board.append([0, 0, 0, 0, 0, 0, 0, 0])
         }
     }
+    
     func set(i: Int,  j: Int, val: Int)
     {
         board[i][j] = val

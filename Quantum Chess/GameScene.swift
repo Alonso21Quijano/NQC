@@ -39,39 +39,53 @@ class GameScene: SKScene
                 smb_touched = false
             }
             let TapNode = Node as? figures
-            if !smb_touched && TapNode?.g_col == turn || TapNode == touchedNode
+            if touch.tapCount == 1
             {
-                touchedNode = TapNode
-                if let node = touchedNode
+                if !smb_touched && TapNode?.g_col == turn || TapNode == touchedNode
                 {
-                    smb_touched = !smb_touched //IMPORTANT!!! DO NOT MAKE TRUE IN CASE YOU'VE MISSED
-                    node.onTap()
+                    touchedNode = TapNode
+                    if let node = touchedNode
+                    {
+                        smb_touched = !smb_touched //IMPORTANT!!! DO NOT MAKE TRUE IN CASE YOU'VE MISSED
+                        node.onTap()
+                    }
+                }
+                else
+                if smb_touched && touchedNode != nil
+                {
+                    let move_position = touch.location(in: board)
+                    let dx = ((move_position.x - touchedNode!.position.x)/board.CellSize).rounded(.toNearestOrAwayFromZero)
+                    let dy = ((move_position.y - touchedNode!.position.y)/board.CellSize).rounded(.toNearestOrAwayFromZero)
+                    if (touchedNode!.moveby(dx: dx, dy: dy, parent: board)) //Don't understand why '!'
+                    {
+                        smb_touched = !smb_touched
+                        turn = -turn
+                        touchedNode = nil
+                        if board.showboard.check(boards: board.boards)
+                        {
+                            smb_touched = true
+                            if board.boards[Int(arc4random_uniform(UInt32(board.boards.count)))].win == -1
+                            {
+                                //black wins
+                                let _ = stamp(col: -1, parent: board)
+                            }
+                            else
+                            {
+                                //white wins
+                                let _ = stamp(col: 1, parent: board)
+                            }
+                        }
+                    }
                 }
             }
-            else
-            if smb_touched && touchedNode != nil
+            else if touch.tapCount == 2
             {
-                let move_position = touch.location(in: board)
-                let dx = ((move_position.x - touchedNode!.position.x)/board.CellSize).rounded(.toNearestOrAwayFromZero)
-                let dy = ((move_position.y - touchedNode!.position.y)/board.CellSize).rounded(.toNearestOrAwayFromZero)
-                if (touchedNode!.moveby(dx: dx, dy: dy, parent: board)) //Don't understand why '!'
+                if !smb_touched && TapNode?.g_col == turn || TapNode == touchedNode
                 {
-                    smb_touched = !smb_touched
-                    turn = -turn
-                    touchedNode = nil
-                    if board.showboard.check(boards: board.boards)
+                    touchedNode = TapNode
+                    if let node = touchedNode
                     {
-                        smb_touched = true
-                        if board.boards[Int(arc4random_uniform(UInt32(board.boards.count)))].win == -1
-                        {
-                            //black wins
-                            let _ = stamp(col: -1, parent: board)
-                        }
-                        else
-                        {
-                            //white wins
-                            let _ = stamp(col: 1, parent: board)
-                        }
+                        node.onDoubleTap()
                     }
                 }
             }

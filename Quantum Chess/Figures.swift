@@ -45,6 +45,10 @@ class figures: SKSpriteNode
     var y: Int = 0 //position
     var ID: Int = 0 //need for understanding when conflict appears
     
+    func isQuantum() -> Bool
+    {
+        return self.colorBlendFactor == 0.5
+    }
     
     func onTap()
     {
@@ -53,11 +57,28 @@ class figures: SKSpriteNode
             self.size = CGSize(width: self.size.width * image_inc, height: self.size.height * image_inc)
             touched = 1
         }
-        else
+        else if touched == 1
         {
-            self.size = CGSize(width: self.size.width / image_inc, height: self.size.height / image_inc)
+            self.size = CGSize(width: 0.05, height: 0.05)
             touched = 0
         }
+        else if touched == 2
+        {
+            self.colorBlendFactor = 0
+            self.size = CGSize(width: 0.05, height: 0.05)
+            touched = 0
+        }
+    }
+    
+    func onDoubleTap()
+    {
+        if touched == 1
+        {
+            self.color = .red
+            self.colorBlendFactor = 0.5
+            touched = 2
+        }
+        
     }
 
     func moveby(dx: CGFloat, dy: CGFloat, parent: Board) -> Bool
@@ -77,8 +98,9 @@ class figures: SKSpriteNode
         
         
         if !((x + Int(dx) >= 0) && (y + Int(dy) >= 0) && (x + Int(dx) < 8) && (y + Int(dy) < 8))
-        {return false}
-        
+        {
+            return false
+        }
         if parent.showboard.figs[x + Int(dx)][y + Int(dy)] != nil && (parent.showboard.figs[x + Int(dx)][y + Int(dy)] as! figures).ID != self.ID
         {
             has_conflict = true
@@ -449,5 +471,6 @@ class pawn: figures
         else
         {return 0}
     }
+    override func onDoubleTap() {}
 }
 
