@@ -13,6 +13,9 @@ class quant_board
 {
     var board: [[Int]] = []
     var win: Int = 0
+    var r_rook_move: [Bool] = [false, false]
+    var l_rook_move: [Bool] = [false, false]
+    var king_move: [Bool] = [false, false]
     init()
     {
         for _ in 0..<8

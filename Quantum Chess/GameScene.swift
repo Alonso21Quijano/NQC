@@ -49,32 +49,32 @@ class GameScene: SKScene
                 }
             }
             else
-                if smb_touched && touchedNode != nil
+            if smb_touched && touchedNode != nil
+            {
+                let move_position = touch.location(in: board)
+                let dx = ((move_position.x - touchedNode!.position.x)/board.CellSize).rounded(.toNearestOrAwayFromZero)
+                let dy = ((move_position.y - touchedNode!.position.y)/board.CellSize).rounded(.toNearestOrAwayFromZero)
+                if (touchedNode!.moveby(dx: dx, dy: dy, parent: board)) //Don't understand why '!'
                 {
-                    let move_position = touch.location(in: board)
-                    let dx = ((move_position.x - touchedNode!.position.x)/board.CellSize).rounded(.toNearestOrAwayFromZero)
-                    let dy = ((move_position.y - touchedNode!.position.y)/board.CellSize).rounded(.toNearestOrAwayFromZero)
-                    if (touchedNode!.moveby(dx: dx, dy: dy, parent: board)) //Don't understand why '!'
+                    smb_touched = !smb_touched
+                    turn = -turn
+                    touchedNode = nil
+                    if board.showboard.check(boards: board.boards)
                     {
-                        smb_touched = !smb_touched
-                        turn = -turn
-                        touchedNode = nil
-                        if board.showboard.check(boards: board.boards)
+                        smb_touched = true
+                        if board.boards[Int(arc4random_uniform(UInt32(board.boards.count)))].win == -1
                         {
-                            smb_touched = true
-                            if board.boards[Int(arc4random_uniform(UInt32(board.boards.count)))].win == -1
-                            {
-                                //black wins
-                                let _ = stamp(col: -1, parent: board)
-                            }
-                            else
-                            {
-                                //white wins
-                                let _ = stamp(col: 1, parent: board)
-                            }
+                            //black wins
+                            let _ = stamp(col: -1, parent: board)
+                        }
+                        else
+                        {
+                            //white wins
+                            let _ = stamp(col: 1, parent: board)
                         }
                     }
                 }
+            }
         }
     }
 }
