@@ -12,7 +12,7 @@ import SpriteKit
 class quant_board
 {
     var board: [[Int]] = []
-    var has_king = true
+    var win: Int = 0
     init()
     {
         for _ in 0..<8
@@ -43,7 +43,7 @@ class show_board
     {
         figs[i][j] = val
     }
-    func update(boards: [quant_board], won: Int)
+    func update(boards: [quant_board])
     {
         if boards.count == 0
         {
@@ -70,7 +70,7 @@ class show_board
         {
             for j in 0...7
             {
-                probability[i][j] = (_: probability[i][j]) / Double(boards.count + won)
+                probability[i][j] = (_: probability[i][j]) / Double(boards.count)
             }
         }
     }
@@ -88,6 +88,18 @@ class show_board
             }
         }
     }
+    
+    func check(boards: [quant_board]) -> Bool
+    {
+        for board in boards
+        {
+            if board.win == 0
+            {
+                return false
+            }
+        }
+        return true
+    }
 }
 
 
@@ -97,8 +109,6 @@ class Board: SKSpriteNode
     var boundSize: CGFloat = 0
     var showboard: show_board = show_board()
     var boards: [quant_board] = [quant_board()]
-    var w_won_boards = 0
-    var b_won_boards = 0
     func create(ParentNode: SKNode)
     {
         ParentNode.addChild(self)

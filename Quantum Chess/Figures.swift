@@ -106,9 +106,9 @@ class figures: SKSpriteNode
                     board.set(i: x,j: y,val: 0)
                     x += Int(dx)
                     y += Int(dy)
-                    if king_eaten && board.board[x][y] == -g_col
+                    if king_eaten && board.board[x][y] == -g_col && board.win == 0
                     {
-                        board.has_king = false
+                        board.win = g_col
                     }
                     board.set(i: x, j: y, val: self.g_col)
                 }
@@ -143,10 +143,6 @@ class figures: SKSpriteNode
                     {
                         parent.boards = parent.boards.filter {$0 !== board}
                     }
-                    if king_eaten
-                    {
-                        EatKing(parent: parent)
-                    }
                     self.run(SKAction.move(by: CGVector(dx: move_x,dy: move_y), duration: 0.1))
                     parent.showboard.set(i: x, j: y, val: self)
                 }
@@ -154,24 +150,20 @@ class figures: SKSpriteNode
             else
             {
                 self.run(SKAction.move(by: CGVector(dx: move_x,dy: move_y), duration: 0.1))
-                if king_eaten
-                {
-                    EatKing(parent: parent)
-                }
                 parent.showboard.set(i: x, j: y, val: self)
             }
             if !did_blocked
             {
                 parent.showboard.set(i: old_x, j: old_y, val: nil)
             }
-            parent.showboard.update(boards: parent.boards, won: parent.w_won_boards+parent.b_won_boards)
+            parent.showboard.update(boards: parent.boards)
             parent.showboard.draw(parent: parent)
         }
         return did_moved
     }
     
     
-    func EatKing(parent: Board)
+    /*func EatKing(parent: Board)
     {
         for board in parent.boards
         {
@@ -189,8 +181,8 @@ class figures: SKSpriteNode
                 }
             }
         }
-    }
-    
+    }*/
+    // Do not this stuff anymore
     
     func put(ParentNode: Board, position: int2, boards: [quant_board]){
         ParentNode.addChild(self)
