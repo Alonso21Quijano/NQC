@@ -59,10 +59,10 @@ class GameScene: SKScene
                         smb_touched = !smb_touched
                         turn = -turn
                         touchedNode = nil
-                        if board.boards.count == 0
+                        if board.showboard.check(boards: board.boards)
                         {
                             smb_touched = true
-                            if Int(arc4random_uniform(UInt32(board.w_won_boards + board.b_won_boards)) + 1) > board.w_won_boards
+                            if board.boards[Int(arc4random_uniform(UInt32(board.boards.count)))].win == -1
                             {
                                 //black wins
                                 let _ = stamp(col: -1, parent: board)
