@@ -68,7 +68,13 @@ class Figure: SKSpriteNode
                     CorrMoveConditions(start_x: start_x, start_y: start_y,
                                          dx: i, dy: j, board: board)
                 {
-                    goodMoves.append([i, j])
+                    if isQuantumMove(){
+                        if board.board[start_x + i][start_y + j] == 0 {
+                            goodMoves.append([i, j])
+                        }
+                    } else {
+                        goodMoves.append([i, j])
+                    }
                 }
             }
         }
@@ -111,12 +117,13 @@ class Figure: SKSpriteNode
             self.size = CGSize(width: parent.CellSize, height: parent.CellSize)
             touched = 0
         }
-        else if touched == 2
+        else if touched == 2 || self.colorBlendFactor == 0.5
         {
             self.colorBlendFactor = 0
             self.size = CGSize(width: parent.CellSize, height: parent.CellSize)
             touched = 0
         }
+        
     }
     
     func onDoubleTap()
@@ -134,6 +141,8 @@ class Figure: SKSpriteNode
     {
         let old_x = x
         let old_y = y
+        let new_x = x + Int(dx)
+        let new_y = y + Int(dy)
         let move_x = dx * parent.CellSize
         let move_y = dy * parent.CellSize
         var did_moved: Bool = false //Show if at least on one of boards the figure was moved
@@ -150,8 +159,10 @@ class Figure: SKSpriteNode
         {
             return false
         }
-        if parent.showboard.figs[x + Int(dx)][y + Int(dy)] != nil && (parent.showboard.figs[x + Int(dx)][y + Int(dy)] as! Figure).ID != self.ID
+        if parent.showboard.figs[x + Int(dx)][y + Int(dy)] != nil && (parent.showboard.figs[x + Int(dx)][y + Int(dy)] as! Figure).ID != self.ID ///!!!!!
         {
+            if isQuantumMove() //no conflicts in Quant Moves!
+            {return false}
             has_conflict = true
             if(parent.showboard.figs[x + Int(dx)][y + Int(dy)] as! Figure).ID == -16 * g_col
             {
@@ -163,6 +174,7 @@ class Figure: SKSpriteNode
         {
             has_castle_conflict = true
         }
+        var additionalQuantumBords:[quant_board] = []
         
         for board in parent.boards //on all board make move if possible
         {
@@ -175,6 +187,9 @@ class Figure: SKSpriteNode
                 if CorrMoves(start_x: x, start_y: y, board: board).contains(where: {$0 == [Int(dx), Int(dy)]}) && (!has_castle_conflict || (parent.showboard.figs[dx > 0 ? 7: 0][y] as! Figure).ID == g_col * (dx > 0 ?  10 : 9))
                 //I ❤️ crocodiles
                 {
+                    if isQuantumMove() { //we add board only if the move is possible
+                        additionalQuantumBords.append(board.copy())
+                    }
                     if abs(self.ID) <= 8 && dy == 2
                     {
                         (self as! Pawn).start_jump = true
@@ -186,8 +201,6 @@ class Figure: SKSpriteNode
                     did_moved = true
                     passed.append(board)
                     board.set(i: x,j: y,val: 0)
-                    x += Int(dx)
-                    y += Int(dy)
                     if self.ID == g_col * 9
                     {
                         board.l_rook_move[g_col == 1 ? 1:0] = true
@@ -200,20 +213,22 @@ class Figure: SKSpriteNode
                     {
                         board.king_move[g_col == 1 ? 1 : 0] = true
                     }
-                    if king_eaten && board.board[x][y] == -g_col && board.win == 0
+                    if king_eaten && board.board[new_x][new_y] == -g_col && board.win == 0
                     {
                         board.win = g_col
                     }
-                    board.set(i: x, j: y, val: self.g_col)
+                    board.set(i: new_x, j: new_y, val: self.g_col)
                     if has_castle_conflict
                     {
                         if dx > 0
                         {
-                            board.set(i: x-1, j: y, val: self.g_col)
+                            board.set(i: 7, j: y, val: 0)
+                            board.set(i: new_x-1, j: new_y, val: self.g_col)
                         }
                         else
                         {
-                            board.set(i: x+1, j: y, val: self.g_col)
+                            board.set(i: 0, j: y, val: 0)
+                            board.set(i: new_x+1, j: new_y, val: self.g_col)
                         }
                     }
                 }
@@ -221,21 +236,38 @@ class Figure: SKSpriteNode
                 {
                     if has_castle_conflict && conflict.index(where: {$0 === board}) == nil
                     {
+                        if isQuantumMove()
+                        {return false}
                         conflict.append(board)
                     }
                     did_blocked = true
                 }
             }
         }
-        
-        if did_moved && did_blocked //correct move but only on some boards it's possiblle -- need to duplicate
+        if (did_moved && (did_blocked || isQuantumMove())) //correct move but only on some boards it's possiblle -- need to duplicate
         {
             let Type = type(of: self)
             let new_fig = Type.init(col: g_col, set_ID: ID) //create a figure of the same type and color
-            new_fig.put(ParentNode: parent, position: [Int32(old_x), Int32(old_y)], boards: []) //[] -- because we do not need to change any board yet
+            new_fig.put(ParentNode: parent, position: [Int32(old_x), Int32(old_y)], boards: additionalQuantumBords)
+            if has_castle_conflict
+            {
+                if dx == 2
+                {
+                    let new_rook = Rook(col: g_col, set_ID: 10 * g_col)
+                    new_rook.put(ParentNode: parent, position: [7, Int32(old_y)], boards: additionalQuantumBords)
+                }
+                else
+                {
+                    let new_rook = Rook(col: g_col, set_ID: 9 * g_col)
+                    new_rook.put(ParentNode: parent, position: [0, Int32(old_y)], boards: additionalQuantumBords)
+                }
+            }
         }
         if did_moved
         {
+            parent.boards += additionalQuantumBords
+            x = new_x
+            y = new_y
             onTap(parent: parent)
             if conflict.count != 0
             {
@@ -253,14 +285,14 @@ class Figure: SKSpriteNode
                     {
                         parent.boards = parent.boards.filter {$0 !== board}
                     }
-                    AcceptMove(move_x: move_x, move_y: move_y, has_castle_conflict: has_castle_conflict, parent: parent)
+                    AcceptMove(move_x: move_x, move_y: move_y, has_castle_conflict: has_castle_conflict, parent: parent, additionalQuantumBords: additionalQuantumBords)
                 }
             }
             else
             {
-                AcceptMove(move_x: move_x, move_y: move_y, has_castle_conflict: has_castle_conflict, parent: parent)
+                AcceptMove(move_x: move_x, move_y: move_y, has_castle_conflict: has_castle_conflict, parent: parent, additionalQuantumBords: additionalQuantumBords)
             }
-            if !did_blocked
+            if !did_blocked && additionalQuantumBords.count == 0
             {
                 parent.showboard.set(i: old_x, j: old_y, val: nil)
                 if has_castle_conflict
@@ -281,7 +313,7 @@ class Figure: SKSpriteNode
         return did_moved
     }
     
-    func AcceptMove(move_x: CGFloat, move_y: CGFloat, has_castle_conflict: Bool, parent: Board)
+    func AcceptMove(move_x: CGFloat, move_y: CGFloat, has_castle_conflict: Bool, parent: Board, additionalQuantumBords: [quant_board])
     {
         self.run(SKAction.move(by: CGVector(dx: move_x,dy: move_y), duration: 0.1))
         if has_castle_conflict //if the move is castle
@@ -291,12 +323,24 @@ class Figure: SKSpriteNode
                 (parent.showboard.figs[7][y] as! Figure).run(SKAction.move(by: CGVector(dx: -2 * parent.CellSize,dy: 0), duration: 0.1))
                 (parent.showboard.figs[7][y] as! Figure).x -= 2
                 parent.showboard.set(i: x-1, j: y, val: parent.showboard.figs[7][y])
+                if additionalQuantumBords.count != 0
+                {
+                    let new_rook = Rook(col: g_col, set_ID: 10 * g_col)
+                    new_rook.put(ParentNode: parent, position: [7, Int32(y)], boards: additionalQuantumBords)
+                    parent.showboard.set(i: 7, j: y, val: new_rook)
+                }
             }
             else
             {
                 (parent.showboard.figs[0][y] as! Figure).run(SKAction.move(by: CGVector(dx: 3 * parent.CellSize,dy: 0), duration: 0.1))
                 (parent.showboard.figs[0][y] as! Figure).x += 3
                 parent.showboard.set(i: x+1, j: y, val: parent.showboard.figs[0][y])
+                if additionalQuantumBords.count != 0
+                {
+                    let new_rook = Rook(col: g_col, set_ID: 9 * g_col)
+                    new_rook.put(ParentNode: parent, position: [0, Int32(y)], boards: additionalQuantumBords)
+                    parent.showboard.set(i: 0, j: y, val: new_rook)
+                }
             }
         }
         parent.showboard.set(i: x, j: y, val: self)
@@ -481,7 +525,7 @@ class Pawn: Figure
     
     override func CorrMoveConditions(start_x: Int, start_y: Int, dx: Int, dy: Int, board: quant_board) -> Bool {
         //more crocodiles to the God of crocodiles!
-        return dy == g_col && dx == 0 && board.board[start_x][start_y + g_col] == 0 || 1 == abs(dx) && dy == g_col && board.board[start_x + dx][start_y + dy] == -g_col || dy == 2*g_col && dx == 0 && start_y == ((g_col == 1) ? 1 : 6)
+        return dy == g_col && dx == 0 && board.board[start_x][start_y + g_col] == 0 || 1 == abs(dx) && dy == g_col && board.board[start_x + dx][start_y + dy] == -g_col || dy == 2*g_col && dx == 0 && start_y == ((g_col == 1) ? 1 : 6) && board.board[x][y+dy] == 0
     }
     override func onDoubleTap() {}
 }
