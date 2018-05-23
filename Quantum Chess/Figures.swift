@@ -528,7 +528,7 @@ class Pawn: Figure
     
     override func CorrMoveConditions(start_x: Int, start_y: Int, dx: Int, dy: Int, board: quant_board) -> Bool {
         //more crocodiles to the God of crocodiles!
-        return dy == g_col && dx == 0 && board.board[start_x][start_y + g_col] == 0 || 1 == abs(dx) && dy == g_col && board.board[start_x + dx][start_y + dy] == -g_col || dy == 2*g_col && dx == 0 && start_y == ((g_col == 1) ? 1 : 6)
+        return dy == g_col && dx == 0 && board.board[start_x][start_y + g_col] == 0 || 1 == abs(dx) && dy == g_col && board.board[start_x + dx][start_y + dy] == -g_col || dy == 2*g_col && dx == 0 && start_y == ((g_col == 1) ? 1 : 6) && board.board[x][y+dy] == 0
     }
     override func onDoubleTap() {}
 }
