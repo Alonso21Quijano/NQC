@@ -284,7 +284,7 @@ class Figure: SKSpriteNode
     func AcceptMove(move_x: CGFloat, move_y: CGFloat, has_castle_conflict: Bool, parent: Board)
     {
         self.run(SKAction.move(by: CGVector(dx: move_x,dy: move_y), duration: 0.1))
-        if has_castle_conflict //if the mov e is castle
+        if has_castle_conflict //if the move is castle
         {
             if move_x > 0
             {
