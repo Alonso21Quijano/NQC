@@ -105,8 +105,7 @@ class show_board
                 {
                     rec.removeFromParent()
                 }
-                if (parent.showboard.figs[child.x][child.y] as! Figure).ID != child.ID || 
-                    (abs(_: parent.showboard.probability[child.x][child.y]) < 1e-8)  //if figure was removed by otherr, or all desks with it were destroyed
+                if (parent.showboard.figs[child.x][child.y] as! Figure) !== child || (abs(parent.showboard.probability[child.x][child.y]) < 1e-8)  //if figure was removed by otherr, or all desks with it were destroyed
                 {
                     child.removeFromParent()
                 }
@@ -160,7 +159,7 @@ class Board: SKSpriteNode
         {
             w_pawn.append(Pawn(col: 1, set_ID: i+1))
             w_pawn[i].put(ParentNode: self, position: [Int32(i), 1], boards: self.boards)
-            b_pawn.append(Pawn(col: -1, set_ID: -i+1))
+            b_pawn.append(Pawn(col: -1, set_ID: -(i+1)))
             b_pawn[i].put(ParentNode: self, position: [Int32(i), 6], boards: self.boards)
         }
         //rooks

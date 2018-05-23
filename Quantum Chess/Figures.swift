@@ -159,8 +159,10 @@ class Figure: SKSpriteNode
         {
             return false
         }
-        if parent.showboard.figs[x + Int(dx)][y + Int(dy)] != nil && (parent.showboard.figs[x + Int(dx)][y + Int(dy)] as! Figure).ID != self.ID
+        if parent.showboard.figs[x + Int(dx)][y + Int(dy)] != nil && (parent.showboard.figs[x + Int(dx)][y + Int(dy)] as! Figure).ID != self.ID ///!!!!!
         {
+            if isQuantumMove() //no conflicts in Quant Moves!
+            {return false}
             has_conflict = true
             if(parent.showboard.figs[x + Int(dx)][y + Int(dy)] as! Figure).ID == -16 * g_col
             {
@@ -176,9 +178,6 @@ class Figure: SKSpriteNode
         
         for board in parent.boards //on all board make move if possible
         {
-            if isQuantumMove() {
-                additionalQuantumBords.append(board.copy())
-            }
             if board.board[x + Int(dx)][y + Int(dy)] != 0 && has_conflict
             {
                 conflict.append(board)
@@ -188,6 +187,9 @@ class Figure: SKSpriteNode
                 if CorrMoves(start_x: x, start_y: y, board: board).contains(where: {$0 == [Int(dx), Int(dy)]}) && (!has_castle_conflict || (parent.showboard.figs[dx > 0 ? 7: 0][y] as! Figure).ID == g_col * (dx > 0 ?  10 : 9))
                 //I ❤️ crocodiles
                 {
+                    if isQuantumMove() { //we add board only if the move is possible
+                        additionalQuantumBords.append(board.copy())
+                    }
                     if abs(self.ID) <= 8 && dy == 2
                     {
                         (self as! Pawn).start_jump = true
@@ -211,7 +213,7 @@ class Figure: SKSpriteNode
                     {
                         board.king_move[g_col == 1 ? 1 : 0] = true
                     }
-                    if king_eaten && board.board[x][y] == -g_col && board.win == 0
+                    if king_eaten && board.board[new_x][new_y] == -g_col && board.win == 0
                     {
                         board.win = g_col
                     }
@@ -238,7 +240,7 @@ class Figure: SKSpriteNode
                 }
             }
         }
-        if (did_moved && did_blocked || isQuantumMove()) //correct move but only on some boards it's possiblle -- need to duplicate
+        if (did_moved && (did_blocked || isQuantumMove())) //correct move but only on some boards it's possiblle -- need to duplicate
         {
             let Type = type(of: self)
             let new_fig = Type.init(col: g_col, set_ID: ID) //create a figure of the same type and color
