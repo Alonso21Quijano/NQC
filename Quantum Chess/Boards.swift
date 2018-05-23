@@ -74,7 +74,7 @@ class show_board
         {
             for j in 0...7
             {
-                probability[i][j] = (_: probability[i][j]) / Double(boards.count)
+                probability[i][j] /=  Double(boards.count)
             }
         }
     }
@@ -85,6 +85,10 @@ class show_board
         {
             if let child = kid as? Figure
             {
+                if child.ID == 0
+                {
+                    continue
+                }
                 for rec in child.children //I don't know how to remove it correctly
                 {
                     rec.removeFromParent()
@@ -96,7 +100,7 @@ class show_board
                 else
                 {
                     let col = child.g_col == 1 ? UIColor.blue : UIColor.red
-                    let new_rect = rect(color: col, width: parent.CellSize, height: parent.CellSize) //You think it means that the rect has the same size as the cell. No.
+                    let new_rect = Rect(color: col, width: parent.CellSize, height: parent.CellSize) //You think it means that the rect has the same size as the cell. No.
                     new_rect.DrawRect(parent: child, prob: parent.showboard.probability[child.x][child.y])
                 }
             }
@@ -123,6 +127,9 @@ class Board: SKSpriteNode
     var boundSize: CGFloat = 0
     var showboard: show_board = show_board()
     var boards: [quant_board] = [quant_board()]
+    var choice_time: Bool = false
+    var transformingPawn: Pawn? = nil
+    
     func create(ParentNode: SKNode)
     {
         ParentNode.addChild(self)
@@ -143,7 +150,7 @@ class Board: SKSpriteNode
         {
             w_pawn.append(Pawn(col: 1, set_ID: i+1))
             w_pawn[i].put(ParentNode: self, position: [Int32(i), 1], boards: self.boards)
-            b_pawn.append(Pawn(col: -1, set_ID: -i+1))
+            b_pawn.append(Pawn(col: -1, set_ID: -(i+1)))
             b_pawn[i].put(ParentNode: self, position: [Int32(i), 6], boards: self.boards)
         }
         //rooks
@@ -183,5 +190,25 @@ class Board: SKSpriteNode
         w_king.put(ParentNode: self, position: [4, 0], boards: self.boards)
         let b_king = King(col: -1, set_ID: -16)
         b_king.put(ParentNode: self, position: [4, 7], boards: self.boards)
+    }
+    
+    func choice(pawn: Pawn)
+    {
+        let f1 = Rook(col: pawn.g_col, set_ID: 0)
+        f1.put(ParentNode: self, position: [2, pawn.g_col == 1 ? 9 : -2], boards: [])
+        let f2 =  Horse(col: pawn.g_col, set_ID: 0)
+        f2.put(ParentNode: self, position: [3, pawn.g_col == 1 ? 9 : -2], boards: [])
+        let f3 =  Bishop(col: pawn.g_col, set_ID: 0)
+        f3.put(ParentNode: self, position: [4, pawn.g_col == 1 ? 9 : -2], boards: [])
+        let f4 =  Queen(col: pawn.g_col, set_ID: 0)
+        f4.put(ParentNode: self, position: [5, pawn.g_col == 1 ? 9 : -2], boards: [])
+        choice_time = true
+        transformingPawn = pawn
+    }
+    
+    func makeChoice()
+    {
+        transformingPawn?.removeFromParent()
+        choice_time = false
     }
 }
