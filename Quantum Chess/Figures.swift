@@ -222,10 +222,12 @@ class Figure: SKSpriteNode
                     {
                         if dx > 0
                         {
+                            board.set(i: 7, j: y, val: 0)
                             board.set(i: new_x-1, j: new_y, val: self.g_col)
                         }
                         else
                         {
+                            board.set(i: 0, j: y, val: 0)
                             board.set(i: new_x+1, j: new_y, val: self.g_col)
                         }
                     }
@@ -234,6 +236,8 @@ class Figure: SKSpriteNode
                 {
                     if has_castle_conflict && conflict.index(where: {$0 === board}) == nil
                     {
+                        if isQuantumMove()
+                        {return false}
                         conflict.append(board)
                     }
                     did_blocked = true
@@ -244,7 +248,20 @@ class Figure: SKSpriteNode
         {
             let Type = type(of: self)
             let new_fig = Type.init(col: g_col, set_ID: ID) //create a figure of the same type and color
-            new_fig.put(ParentNode: parent, position: [Int32(old_x), Int32(old_y)], boards: additionalQuantumBords) //[] -- because we do not need to change any board yet
+            new_fig.put(ParentNode: parent, position: [Int32(old_x), Int32(old_y)], boards: additionalQuantumBords)
+            if has_castle_conflict
+            {
+                if dx == 2
+                {
+                    let new_rook = Rook(col: g_col, set_ID: 10 * g_col)
+                    new_rook.put(ParentNode: parent, position: [7, Int32(old_y)], boards: additionalQuantumBords)
+                }
+                else
+                {
+                    let new_rook = Rook(col: g_col, set_ID: 9 * g_col)
+                    new_rook.put(ParentNode: parent, position: [0, Int32(old_y)], boards: additionalQuantumBords)
+                }
+            }
         }
         if did_moved
         {
@@ -275,13 +292,13 @@ class Figure: SKSpriteNode
                         {
                             (parent.showboard.figs[7][y] as! Figure).run(SKAction.move(by: CGVector(dx: -2 * parent.CellSize,dy: 0), duration: 0.1))
                             (parent.showboard.figs[7][y] as! Figure).x -= 2
-                            parent.showboard.set(i: x, j: y, val: parent.showboard.figs[7][y])
+                            parent.showboard.set(i: x-1, j: y, val: parent.showboard.figs[7][y])
                         }
                         else
                         {
                             (parent.showboard.figs[0][y] as! Figure).run(SKAction.move(by: CGVector(dx: 3 * parent.CellSize,dy: 0), duration: 0.1))
                             (parent.showboard.figs[0][y] as! Figure).x += 3
-                            parent.showboard.set(i: x, j: y, val: parent.showboard.figs[0][y])
+                            parent.showboard.set(i: x+1, j: y, val: parent.showboard.figs[0][y])
                         }
                     }
                     parent.showboard.set(i: x, j: y, val: self)
@@ -298,12 +315,24 @@ class Figure: SKSpriteNode
                         (parent.showboard.figs[7][y] as! Figure).run(SKAction.move(by: CGVector(dx: -2 * parent.CellSize,dy: 0), duration: 0.1))
                         (parent.showboard.figs[7][y] as! Figure).x -= 2
                         parent.showboard.set(i: x-1, j: y, val: parent.showboard.figs[7][y])
+                        if additionalQuantumBords.count != 0
+                        {
+                            let new_rook = Rook(col: g_col, set_ID: 10 * g_col)
+                            new_rook.put(ParentNode: parent, position: [7, Int32(old_y)], boards: additionalQuantumBords)
+                            parent.showboard.set(i: 7, j: y, val: new_rook)
+                        }
                     }
                     else
                     {
                         (parent.showboard.figs[0][y] as! Figure).run(SKAction.move(by: CGVector(dx: 3 * parent.CellSize,dy: 0), duration: 0.1))
                         (parent.showboard.figs[0][y] as! Figure).x += 3
                         parent.showboard.set(i: x+1, j: y, val: parent.showboard.figs[0][y])
+                        if additionalQuantumBords.count != 0
+                        {
+                            let new_rook = Rook(col: g_col, set_ID: 9 * g_col)
+                            new_rook.put(ParentNode: parent, position: [0, Int32(old_y)], boards: additionalQuantumBords)
+                            parent.showboard.set(i: 0, j: y, val: new_rook)
+                        }
                     }
                 }
             }
