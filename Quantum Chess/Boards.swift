@@ -93,7 +93,7 @@ class show_board
                 {
                     rec.removeFromParent()
                 }
-                if (parent.showboard.figs[child.x][child.y] as! Figure).ID != child.ID || (abs(_: parent.showboard.probability[child.x][child.y]) < 1e-8)  //if figure was removed by otherr, or all desks with it were destroyed
+                if (parent.showboard.figs[child.x][child.y] as! Figure).ID != child.ID || (abs(parent.showboard.probability[child.x][child.y]) < 1e-8)  //if figure was removed by otherr, or all desks with it were destroyed
                 {
                     child.removeFromParent()
                 }

@@ -278,13 +278,13 @@ class Figure: SKSpriteNode
             {
                 (parent.showboard.figs[7][y] as! Figure).run(SKAction.move(by: CGVector(dx: -2 * parent.CellSize,dy: 0), duration: 0.1))
                 (parent.showboard.figs[7][y] as! Figure).x -= 2
-                parent.showboard.set(i: x, j: y, val: parent.showboard.figs[7][y])
+                parent.showboard.set(i: x-1, j: y, val: parent.showboard.figs[7][y])
             }
             else
             {
                 (parent.showboard.figs[0][y] as! Figure).run(SKAction.move(by: CGVector(dx: 3 * parent.CellSize,dy: 0), duration: 0.1))
                 (parent.showboard.figs[0][y] as! Figure).x += 3
-                parent.showboard.set(i: x, j: y, val: parent.showboard.figs[0][y])
+                parent.showboard.set(i: x+1, j: y, val: parent.showboard.figs[0][y])
             }
         }
         parent.showboard.set(i: x, j: y, val: self)
