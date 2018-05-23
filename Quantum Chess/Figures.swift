@@ -25,7 +25,7 @@ class stamp:SKSpriteNode
 }
 
 
-class figures: SKSpriteNode
+class Figure: SKSpriteNode
 {
     required convenience init(col: Int, set_ID: Int)
     {
@@ -38,14 +38,33 @@ class figures: SKSpriteNode
     }
     
     var g_col: Int = 0 //color. Don't remember what "g_" means
-    func corr_moves(dx: Int, dy: Int, board: quant_board) -> Int {return 1} //function to check if you move figure correctly
+    
+    func CorrMoves(start_x: Int, start_y: Int, board: quant_board) -> [[Int]]
+    {
+        var goodMoves:[[Int]] = []
+        for i in -8...8 {
+            for j in -8...8 {
+                if (start_x + i >= 0 && start_x + i < 8) &&
+                    (start_y + j >= 0 && start_y + j < 8) &&
+                    (board.board[start_x + i][start_y + j] != g_col) &&
+                    CorrMoveConditions(start_x: start_x, start_y: start_y,
+                                         dx: i, dy: j, board: board)
+                {
+                    goodMoves.append([i, j])
+                }
+            }
+        }
+        return goodMoves
+    } //function to check if you move figure correctly
+    func CorrMoveConditions(start_x: Int, start_y: Int,
+                              dx: Int, dy: Int, board: quant_board) -> Bool {return true}
     var touched = 0 //let understand if we heck or unchek figure
     let image_inc: CGFloat = 1.4
     var x: Int = 0 //position
     var y: Int = 0 //position
     var ID: Int = 0 //need for understanding when conflict appears
     
-    func isQuantum() -> Bool
+    func isQuantumMove() -> Bool
     {
         return self.colorBlendFactor == 0.5
     }
@@ -101,10 +120,10 @@ class figures: SKSpriteNode
         {
             return false
         }
-        if parent.showboard.figs[x + Int(dx)][y + Int(dy)] != nil && (parent.showboard.figs[x + Int(dx)][y + Int(dy)] as! figures).ID != self.ID
+        if parent.showboard.figs[x + Int(dx)][y + Int(dy)] != nil && (parent.showboard.figs[x + Int(dx)][y + Int(dy)] as! Figure).ID != self.ID
         {
             has_conflict = true
-            if(parent.showboard.figs[x + Int(dx)][y + Int(dy)] as! figures).ID == -16 * g_col
+            if(parent.showboard.figs[x + Int(dx)][y + Int(dy)] as! Figure).ID == -16 * g_col
             {
                 king_eaten = true
             }
@@ -123,7 +142,7 @@ class figures: SKSpriteNode
             }
             if board.board[x][y] != 0
             {
-                if corr_moves(dx: Int(dx), dy: Int(dy), board: board) == 1 && (!has_castle_conflict || (parent.showboard.figs[dx > 0 ? 7: 0][y] as! figures).ID == g_col * (dx > 0 ?  10 : 9))
+                if CorrMoves(start_x: x, start_y: y, board: board).contains([Int(dx), Int(dy)]) && (!has_castle_conflict || (parent.showboard.figs[dx > 0 ? 7: 0][y] as! Figure).ID == g_col * (dx > 0 ?  10 : 9))
                 //I ❤️ crocodiles
                 {
                     if let del_ind = conflict.index(where: {$0 === board})
@@ -205,14 +224,14 @@ class figures: SKSpriteNode
                     {
                         if dx == 2
                         {
-                            (parent.showboard.figs[7][y] as! figures).run(SKAction.move(by: CGVector(dx: -2 * parent.CellSize,dy: 0), duration: 0.1))
-                            (parent.showboard.figs[7][y] as! figures).x -= 2
+                            (parent.showboard.figs[7][y] as! Figure).run(SKAction.move(by: CGVector(dx: -2 * parent.CellSize,dy: 0), duration: 0.1))
+                            (parent.showboard.figs[7][y] as! Figure).x -= 2
                             parent.showboard.set(i: x, j: y, val: parent.showboard.figs[7][y])
                         }
                         else
                         {
-                            (parent.showboard.figs[0][y] as! figures).run(SKAction.move(by: CGVector(dx: 3 * parent.CellSize,dy: 0), duration: 0.1))
-                            (parent.showboard.figs[0][y] as! figures).x += 3
+                            (parent.showboard.figs[0][y] as! Figure).run(SKAction.move(by: CGVector(dx: 3 * parent.CellSize,dy: 0), duration: 0.1))
+                            (parent.showboard.figs[0][y] as! Figure).x += 3
                             parent.showboard.set(i: x, j: y, val: parent.showboard.figs[0][y])
                         }
                     }
@@ -227,14 +246,14 @@ class figures: SKSpriteNode
                 {
                     if dx == 2
                     {
-                        (parent.showboard.figs[7][y] as! figures).run(SKAction.move(by: CGVector(dx: -2 * parent.CellSize,dy: 0), duration: 0.1))
-                        (parent.showboard.figs[7][y] as! figures).x -= 2
+                        (parent.showboard.figs[7][y] as! Figure).run(SKAction.move(by: CGVector(dx: -2 * parent.CellSize,dy: 0), duration: 0.1))
+                        (parent.showboard.figs[7][y] as! Figure).x -= 2
                         parent.showboard.set(i: x-1, j: y, val: parent.showboard.figs[7][y])
                     }
                     else
                     {
-                        (parent.showboard.figs[0][y] as! figures).run(SKAction.move(by: CGVector(dx: 3 * parent.CellSize,dy: 0), duration: 0.1))
-                        (parent.showboard.figs[0][y] as! figures).x += 3
+                        (parent.showboard.figs[0][y] as! Figure).run(SKAction.move(by: CGVector(dx: 3 * parent.CellSize,dy: 0), duration: 0.1))
+                        (parent.showboard.figs[0][y] as! Figure).x += 3
                         parent.showboard.set(i: x+1, j: y, val: parent.showboard.figs[0][y])
                     }
                 }
@@ -280,7 +299,7 @@ class figures: SKSpriteNode
 }
 
 
-class horse: figures
+class horse: Figure
 {
     required convenience init(col: Int, set_ID: Int)
     {
@@ -291,23 +310,13 @@ class horse: figures
         g_col = col
         ID = set_ID
     }
-    override func corr_moves(dx: Int, dy: Int, board: quant_board) -> Int
-    {
-        if board.board[x + dx][y + dy] == g_col
-        {return 0}
-        if (abs(dx) + abs(dy) == 3) && (abs(dx * dy) == 2)
-        {
-            return 1
-        }
-        else
-        {
-            return 0
-        }
+    override func CorrMoveConditions(start_x: Int, start_y: Int, dx: Int, dy: Int, board: quant_board) -> Bool {
+        return (abs(dx) + abs(dy) == 3) && (abs(dx * dy) == 2)
     }
 }
 
 
-class king: figures
+class king: Figure
 {
     required convenience init(col: Int, set_ID: Int)
     {
@@ -318,10 +327,7 @@ class king: figures
         g_col = col
         ID = set_ID
     }
-    override func corr_moves(dx: Int, dy: Int, board: quant_board) -> Int
-    {
-        if board.board[x + dx][y + dy] == g_col
-        {return 0}
+    override func CorrMoveConditions(start_x: Int, start_y: Int, dx: Int, dy: Int, board: quant_board) -> Bool {
         if (abs(dx) == 2)&&(dy == 0)&&(!board.king_move[g_col == 1 ? 1 : 0])&&(dx > 0 && !board.r_rook_move[g_col == 1 ? 1 : 0] || dx<0 && !board.l_rook_move[g_col == 1 ? 1 : 0]) //castle
         {
             let sign =  dx > 0 ? 1 : -1
@@ -329,24 +335,17 @@ class king: figures
             while ch_x != 0 &&  ch_x != 7
             {
                 if board.board[ch_x][y] != 0
-                {return 0}
+                {return false}
                 ch_x += sign
             }
-            return 1
+            return true
         }
-        if (abs(dx) <= 1) && (abs(dy) <= 1) && (abs(dx) + abs(dy) != 0)
-        {
-            return 1
-        }
-        else
-        {
-            return 0
-        }
+        return (abs(dx) <= 1) && (abs(dy) <= 1) && (abs(dx) + abs(dy) != 0)
     }
 }
 
 
-class queen: figures
+class queen: Figure
 {
     required convenience init(col: Int, set_ID: Int)
     {
@@ -358,29 +357,26 @@ class queen: figures
         ID = set_ID
     }
     
-    override func corr_moves(dx: Int, dy: Int, board: quant_board) -> Int
-    {
-        if board.board[x + dx][y + dy] == g_col
-        {return 0}
+    override func CorrMoveConditions(start_x: Int, start_y: Int, dx: Int, dy: Int, board: quant_board) -> Bool {
         let kx = (dx == 0) ? 0 : Int(dx / abs(dx))
         let ky = (dy == 0) ? 0 : Int(dy / abs(dy))
         let d: Int = max(_: abs(dx), _: abs(dy))
         if abs(dx) != abs(dy) && dx*dy != 0 || abs(dx) + abs(dy) == 0
-        {return 0}
+        {return false}
         if d > 1 //this language makes me suffer
         {
             for i in 1 ..< d
             {
                 if board.board[x + i*kx][y + i*ky] != 0
-                {return 0}
+                {return false}
             }
         }
-        return 1
+        return true
     }
 }
 
 
-class rook: figures
+class rook: Figure
 {
     required convenience init(col: Int, set_ID: Int)
     {
@@ -391,31 +387,25 @@ class rook: figures
         g_col = col
         ID = set_ID
     }
-    
-    override func corr_moves(dx: Int, dy: Int, board: quant_board) -> Int
-    {
-        if board.board[x + dx][y + dy] == g_col
-        {return 0}
+    override func CorrMoveConditions(start_x: Int, start_y: Int, dx: Int, dy: Int, board: quant_board) -> Bool {
         let kx = (dx == 0) ? 0 : Int(dx / abs(dx))
         let ky = (dy == 0) ? 0 : Int(dy / abs(dy))
         let d: Int = max(_: abs(dx), _ : abs(dy))
         if kx*ky != 0 || abs(dx) + abs(dy) == 0
-        {return 0}
+        {return false}
         if d > 1 //this language makes me suffer
         {
             for i in 1 ..< d
             {
                 if board.board[x + i*kx][y + i*ky] != 0
-                {return 0}
+                {return false}
             }
         }
-        
-        return 1
+        return true
     }
 }
 
-
-class bishop: figures
+class bishop: Figure
 {
     required convenience init(col: Int, set_ID: Int)
     {
@@ -426,30 +416,26 @@ class bishop: figures
         g_col = col
         ID = set_ID
     }
-    
-    override func corr_moves(dx: Int, dy: Int, board: quant_board) -> Int
-    {
-        if board.board[x + dx][y + dy] == g_col
-        {return 0}
+    override func CorrMoveConditions(start_x: Int, start_y: Int, dx: Int, dy: Int, board: quant_board) -> Bool {
         let kx = (dx == 0) ? 0 : Int(dx / abs(dx))
         let ky = (dy == 0) ? 0 : Int(dy / abs(dy))
         let d: Int = max(_: abs(dx), _ : abs(dy))
         if abs(dx) != abs(dy) || abs(dx) + abs(dy) == 0
-        {return 0}
+        {return false}
         if d > 1 //this language makes me suffer
         {
             for i in 1 ..< d
             {
                 if board.board[x + i*kx][y + i*ky] != 0
-                {return 0}
+                {return false}
             }
         }
-        return 1
+        return true
     }
 }
 
 
-class pawn: figures
+class pawn: Figure
 {
     required convenience init(col: Int, set_ID: Int)
     {
@@ -461,15 +447,9 @@ class pawn: figures
         ID = set_ID
     }
     
-    override func corr_moves(dx: Int, dy: Int, board: quant_board) -> Int
-    {
-        if board.board[x + dx][y + dy] == g_col
-        {return 0}
+    override func CorrMoveConditions(start_x: Int, start_y: Int, dx: Int, dy: Int, board: quant_board) -> Bool {
         //more crocodiles to the God of crocodiles!
-        if dy == g_col && dx == 0 && board.board[x][y + g_col] == 0 || 1 == abs(dx) && dy == g_col && board.board[x + dx][y + dy] == -g_col || dy == 2*g_col && dx == 0 && y == ((g_col == 1) ? 1 : 6)
-        {return 1}
-        else
-        {return 0}
+        return dy == g_col && dx == 0 && board.board[x][y + g_col] == 0 || 1 == abs(dx) && dy == g_col && board.board[x + dx][y + dy] == -g_col || dy == 2*g_col && dx == 0 && y == ((g_col == 1) ? 1 : 6)
     }
     override func onDoubleTap() {}
 }

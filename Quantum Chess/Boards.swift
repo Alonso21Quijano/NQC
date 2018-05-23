@@ -84,9 +84,9 @@ class show_board
     {
         for kid in parent.children
         {
-            if let child = kid as? figures
+            if let child = kid as? Figure
             {
-                if (parent.showboard.figs[child.x][child.y] as! figures).ID != child.ID || (abs(_: parent.showboard.probability[child.x][child.y]) < 1e-8)  //if figure was removed by our, or all desks with it were destroyed
+                if (parent.showboard.figs[child.x][child.y] as! Figure).ID != child.ID || (abs(_: parent.showboard.probability[child.x][child.y]) < 1e-8)  //if figure was removed by our, or all desks with it were destroyed
                 {
                     child.removeFromParent()
                 }

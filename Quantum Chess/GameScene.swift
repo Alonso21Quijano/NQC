@@ -21,7 +21,7 @@ class GameScene: SKScene
     }
     
     var smb_touched = false//Выбрана ли фигура для хода
-    var touchedNode: figures?
+    var touchedNode: Figure?
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?)
     {
@@ -38,7 +38,7 @@ class GameScene: SKScene
                 touchedNode = nil
                 smb_touched = false
             }
-            let TapNode = Node as? figures
+            let TapNode = Node as? Figure
             if touch.tapCount == 1
             {
                 if !smb_touched && TapNode?.g_col == turn || TapNode == touchedNode
