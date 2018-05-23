@@ -9,6 +9,24 @@
 import SpriteKit
 
 
+class rect: SKSpriteNode
+{
+    convenience init(color: UIColor, width: CGFloat, height: CGFloat)
+    {
+        self.init(color: color, size: CGSize(width: 0.1 * width, height: height * 0.9))
+    }
+    func DrawRect(parent: Figure, prob: Double)
+    {
+        self.size.height = (parent.parent as! Board).CellSize * CGFloat(0.9 * prob)
+        self.zPosition = -1
+        parent.addChild(self)
+        self.anchorPoint = CGPoint(x: parent.g_col == 1 ? -4 : 5, y: 0.5)
+        let x =  0 //If not 0 rects run away from screen. DO NOT TOUCH
+        let y = 0
+        self.position = CGPoint(x: x, y: y)
+    }
+}
+
 class stamp:SKSpriteNode
 {
     convenience init(col: Int, parent: Board)
@@ -142,9 +160,13 @@ class Figure: SKSpriteNode
             }
             if board.board[x][y] != 0
             {
-                if CorrMoves(start_x: x, start_y: y, board: board).contains([Int(dx), Int(dy)]) && (!has_castle_conflict || (parent.showboard.figs[dx > 0 ? 7: 0][y] as! Figure).ID == g_col * (dx > 0 ?  10 : 9))
+                if CorrMoves(start_x: x, start_y: y, board: board).contains(where: {$0 == [Int(dx), Int(dy)]}) && (!has_castle_conflict || (parent.showboard.figs[dx > 0 ? 7: 0][y] as! Figure).ID == g_col * (dx > 0 ?  10 : 9))
                 //I ❤️ crocodiles
                 {
+                    if abs(self.ID) <= 8 && dy == 2
+                    {
+                        (self as! Pawn).start_jump = true
+                    }
                     if let del_ind = conflict.index(where: {$0 === board})
                     {
                         conflict.remove(at: del_ind) //Hope it is working!
@@ -437,6 +459,7 @@ class Bishop: Figure
 
 class Pawn: Figure
 {
+    var start_jump = false
     required convenience init(col: Int, set_ID: Int)
     {
         if col == 1

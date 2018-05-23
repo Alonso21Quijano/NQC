@@ -18,6 +18,8 @@ class GameScene: SKScene
         self.backgroundColor = UIColor(red: 0.5, green: 0.5, blue: 1, alpha: 1.0)
         board = Board(imageNamed: "TestBoard")
         board.create(ParentNode: self)
+        board.showboard.update(boards: board.boards)
+        board.showboard.draw(parent: board)
     }
     
     var smb_touched = false//Выбрана ли фигура для хода
@@ -34,6 +36,8 @@ class GameScene: SKScene
                 board.removeFromParent()
                 board = Board(imageNamed: "TestBoard")
                 board.create(ParentNode: self)
+                board.showboard.update(boards: board.boards)
+                board.showboard.draw(parent: board)
                 turn = 1
                 touchedNode = nil
                 smb_touched = false

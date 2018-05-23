@@ -16,7 +16,6 @@ class quant_board
     var r_rook_move: [Bool] = [false, false]
     var l_rook_move: [Bool] = [false, false]
     var king_move: [Bool] = [false, false]
-    
     init()
     {
         for _ in 0..<8
@@ -67,7 +66,7 @@ class show_board
             {
                 for j in 0...7
                 {
-                    probability[i][j] += Double(board.board[i][j])
+                    probability[i][j] += abs(Double(board.board[i][j]))
                 }
             }
         }
@@ -86,9 +85,19 @@ class show_board
         {
             if let child = kid as? Figure
             {
-                if (parent.showboard.figs[child.x][child.y] as! Figure).ID != child.ID || (abs(_: parent.showboard.probability[child.x][child.y]) < 1e-8)  //if figure was removed by our, or all desks with it were destroyed
+                for rec in child.children //I don't know how to remove it correctly
+                {
+                    rec.removeFromParent()
+                }
+                if (parent.showboard.figs[child.x][child.y] as! Figure).ID != child.ID || (abs(_: parent.showboard.probability[child.x][child.y]) < 1e-8)  //if figure was removed by otherr, or all desks with it were destroyed
                 {
                     child.removeFromParent()
+                }
+                else
+                {
+                    let col = child.g_col == 1 ? UIColor.blue : UIColor.red
+                    let new_rect = rect(color: col, width: parent.CellSize, height: parent.CellSize) //You think it means that the rect has the same size as the cell. No.
+                    new_rect.DrawRect(parent: child, prob: parent.showboard.probability[child.x][child.y])
                 }
             }
         }
@@ -174,6 +183,5 @@ class Board: SKSpriteNode
         w_king.put(ParentNode: self, position: [4, 0], boards: self.boards)
         let b_king = King(col: -1, set_ID: -16)
         b_king.put(ParentNode: self, position: [4, 7], boards: self.boards)
-        
     }
 }
