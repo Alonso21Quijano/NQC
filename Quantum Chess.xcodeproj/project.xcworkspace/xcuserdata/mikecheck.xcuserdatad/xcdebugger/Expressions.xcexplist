@@ -20,7 +20,15 @@
          contextName = "show_board.draw(parent:):Boards.swift">
          <PersistentStrings>
             <PersistentString
-               value = "child.children">
+               value = "child.ID">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "Figure.moveby(dx:dy:parent:):Figures.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "isQuantumMove()">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
