@@ -68,7 +68,13 @@ class Figure: SKSpriteNode
                     CorrMoveConditions(start_x: start_x, start_y: start_y,
                                          dx: i, dy: j, board: board)
                 {
-                    goodMoves.append([i, j])
+                    if isQuantumMove(){
+                        if board.board[start_x + i][start_y + j] == 0 {
+                            goodMoves.append([i, j])
+                        }
+                    } else {
+                        goodMoves.append([i, j])
+                    }
                 }
             }
         }
@@ -111,12 +117,13 @@ class Figure: SKSpriteNode
             self.size = CGSize(width: parent.CellSize, height: parent.CellSize)
             touched = 0
         }
-        else if touched == 2
+        else if touched == 2 || self.colorBlendFactor == 0.5
         {
             self.colorBlendFactor = 0
             self.size = CGSize(width: parent.CellSize, height: parent.CellSize)
             touched = 0
         }
+        
     }
     
     func onDoubleTap()
@@ -134,6 +141,8 @@ class Figure: SKSpriteNode
     {
         let old_x = x
         let old_y = y
+        let new_x = x + Int(dx)
+        let new_y = y + Int(dy)
         let move_x = dx * parent.CellSize
         let move_y = dy * parent.CellSize
         var did_moved: Bool = false //Show if at least on one of boards the figure was moved
@@ -163,9 +172,13 @@ class Figure: SKSpriteNode
         {
             has_castle_conflict = true
         }
+        var additionalQuantumBords:[quant_board] = []
         
         for board in parent.boards //on all board make move if possible
         {
+            if isQuantumMove() {
+                additionalQuantumBords.append(board.copy())
+            }
             if board.board[x + Int(dx)][y + Int(dy)] != 0 && has_conflict
             {
                 conflict.append(board)
@@ -186,8 +199,6 @@ class Figure: SKSpriteNode
                     did_moved = true
                     passed.append(board)
                     board.set(i: x,j: y,val: 0)
-                    x += Int(dx)
-                    y += Int(dy)
                     if self.ID == g_col * 9
                     {
                         board.l_rook_move[g_col == 1 ? 1:0] = true
@@ -204,16 +215,16 @@ class Figure: SKSpriteNode
                     {
                         board.win = g_col
                     }
-                    board.set(i: x, j: y, val: self.g_col)
+                    board.set(i: new_x, j: new_y, val: self.g_col)
                     if has_castle_conflict
                     {
                         if dx > 0
                         {
-                            board.set(i: x-1, j: y, val: self.g_col)
+                            board.set(i: new_x-1, j: new_y, val: self.g_col)
                         }
                         else
                         {
-                            board.set(i: x+1, j: y, val: self.g_col)
+                            board.set(i: new_x+1, j: new_y, val: self.g_col)
                         }
                     }
                 }
@@ -227,15 +238,17 @@ class Figure: SKSpriteNode
                 }
             }
         }
-        
-        if did_moved && did_blocked //correct move but only on some boards it's possiblle -- need to duplicate
+        if (did_moved && did_blocked || isQuantumMove()) //correct move but only on some boards it's possiblle -- need to duplicate
         {
             let Type = type(of: self)
             let new_fig = Type.init(col: g_col, set_ID: ID) //create a figure of the same type and color
-            new_fig.put(ParentNode: parent, position: [Int32(old_x), Int32(old_y)], boards: []) //[] -- because we do not need to change any board yet
+            new_fig.put(ParentNode: parent, position: [Int32(old_x), Int32(old_y)], boards: additionalQuantumBords) //[] -- because we do not need to change any board yet
         }
         if did_moved
         {
+            parent.boards += additionalQuantumBords
+            x = new_x
+            y = new_y
             onTap(parent: parent)
             if conflict.count != 0
             {
@@ -292,7 +305,7 @@ class Figure: SKSpriteNode
                     }
                 }
             }
-            if !did_blocked
+            if !did_blocked && additionalQuantumBords.count == 0
             {
                 parent.showboard.set(i: old_x, j: old_y, val: nil)
                 if has_castle_conflict

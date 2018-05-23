@@ -28,6 +28,22 @@ class quant_board
     {
         board[i][j] = val
     }
+    
+    func copy() -> quant_board{
+        let bord = quant_board()
+        for i in 0..<8 {
+            for j in 0..<8 {
+                bord.board[i][j] = self.board[i][j]
+            }
+        }
+        bord.win = win
+        for i in 0..<2 {
+            bord.r_rook_move[i] = r_rook_move[i]
+            bord.l_rook_move[i] = l_rook_move[i]
+            bord.king_move[i] = king_move[i]
+        }
+        return bord
+    }
 }
 
 
@@ -89,7 +105,8 @@ class show_board
                 {
                     rec.removeFromParent()
                 }
-                if (parent.showboard.figs[child.x][child.y] as! Figure).ID != child.ID || (abs(_: parent.showboard.probability[child.x][child.y]) < 1e-8)  //if figure was removed by otherr, or all desks with it were destroyed
+                if (parent.showboard.figs[child.x][child.y] as! Figure).ID != child.ID || 
+                    (abs(_: parent.showboard.probability[child.x][child.y]) < 1e-8)  //if figure was removed by otherr, or all desks with it were destroyed
                 {
                     child.removeFromParent()
                 }
