@@ -9,6 +9,24 @@
 import SpriteKit
 
 
+class rect: SKSpriteNode
+{
+    convenience init(color: UIColor, width: CGFloat, height: CGFloat)
+    {
+        self.init(color: color, size: CGSize(width: 0.1 * width, height: height * 0.9))
+    }
+    func DrawRect(parent: figures, prob: Double)
+    {
+        self.size.height = (parent.parent as! Board).CellSize * CGFloat(0.9 * prob)
+        self.zPosition = -1
+        parent.addChild(self)
+        self.anchorPoint = CGPoint(x: parent.g_col == 1 ? -4 : 5, y: 0.5)
+        let x =  0 //If not 0 rects run away from screen. DO NOT TOUCH
+        let y = 0
+        self.position = CGPoint(x: x, y: y)
+    }
+}
+
 class stamp:SKSpriteNode
 {
     convenience init(col: Int, parent: Board)
@@ -104,6 +122,10 @@ class figures: SKSpriteNode
                 if corr_moves(dx: Int(dx), dy: Int(dy), board: board) == 1 && (!has_castle_conflict || (parent.showboard.figs[dx > 0 ? 7: 0][y] as! figures).ID == g_col * (dx > 0 ?  10 : 9))
                 //I ❤️ crocodiles
                 {
+                    if abs(self.ID) <= 8 && dy == 2
+                    {
+                        (self as! pawn).start_jump = true
+                    }
                     if let del_ind = conflict.index(where: {$0 === board})
                     {
                         conflict.remove(at: del_ind) //Hope it is working!
@@ -429,6 +451,7 @@ class bishop: figures
 
 class pawn: figures
 {
+    var start_jump = false
     required convenience init(col: Int, set_ID: Int)
     {
         if col == 1
@@ -443,6 +466,11 @@ class pawn: figures
     {
         if board.board[x + dx][y + dy] == g_col
         {return 0}
+        /*if y == (g_col == 1 ? 4 : 3) && abs((show.figs[x + dx][y] as! figures).ID) <= 8 && board.board[x + dx][y] == -g_col && (show.figs[x + dx][y] as! pawn).start_jump
+        {
+            board.take = true
+            return 1
+        }*/
         //more crocodiles to the God of crocodiles!
         if dy == g_col && dx == 0 && board.board[x][y + g_col] == 0 || 1 == abs(dx) && dy == g_col && board.board[x + dx][y + dy] == -g_col || dy == 2*g_col && dx == 0 && y == ((g_col == 1) ? 1 : 6)
         {return 1}
