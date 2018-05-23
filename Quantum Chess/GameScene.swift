@@ -31,7 +31,7 @@ class GameScene: SKScene
         {
             let location = touch.location(in: self)
             let Node = atPoint(location)
-            if Node is stamp
+            if Node is Stamp
             {
                 board.removeFromParent()
                 board = Board(imageNamed: "TestBoard")
@@ -43,6 +43,49 @@ class GameScene: SKScene
                 smb_touched = false
             }
             let TapNode = Node as? Figure
+            if board.choice_time
+            {
+                if (TapNode?.ID == 0)
+                {
+                    if Node is Rook
+                    {
+                        let new_fig = Rook(col: TapNode!.g_col, set_ID: TapNode!.g_col * 16 + board.transformingPawn!.ID) //create a figure of the same type and color
+                        new_fig.put(ParentNode: board, position: [Int32(board.transformingPawn!.x), Int32(board.transformingPawn!.y)], boards: []) //[] -- because we do not need to change any board yet
+                    }
+                    if Node is Bishop
+                    {
+                        let new_fig = Bishop(col: TapNode!.g_col, set_ID: TapNode!.g_col * 16 + board.transformingPawn!.ID) //create a figure of the same type and color
+                        new_fig.put(ParentNode: board, position: [Int32(board.transformingPawn!.x), Int32(board.transformingPawn!.y)], boards: []) //[] -- because we do not need to change any board yet
+                    }
+                    if Node is Horse
+                    {
+                        let new_fig = Horse(col: TapNode!.g_col, set_ID: TapNode!.g_col * 16 + board.transformingPawn!.ID) //create a figure of the same type and color
+                        new_fig.put(ParentNode: board, position: [Int32(board.transformingPawn!.x), Int32(board.transformingPawn!.y)], boards: []) //[] -- because we do not need to change any board yet
+                    }
+                    if Node is Queen
+                    {
+                        let new_fig = Queen(col: TapNode!.g_col, set_ID: TapNode!.g_col * 16 + board.transformingPawn!.ID) //create a figure of the same type and color
+                        new_fig.put(ParentNode: board, position: [Int32(board.transformingPawn!.x), Int32(board.transformingPawn!.y)], boards: []) //[] -- because we do not need to change any board yet
+                    }
+                    board.makeChoice()
+                    for kid in board.children
+                    {
+                        if let child = kid as? Figure
+                        {
+                            if child.ID == 0
+                            {
+                                child.removeFromParent()
+                            }
+                        }
+                    }
+                    board.showboard.update(boards: board.boards)
+                    board.showboard.draw(parent: board)
+                }
+                else
+                {
+                    return
+                }
+            }
             if touch.tapCount == 1
             {
                 if !smb_touched && TapNode?.g_col == turn || TapNode == touchedNode
@@ -71,12 +114,12 @@ class GameScene: SKScene
                             if board.boards[Int(arc4random_uniform(UInt32(board.boards.count)))].win == -1
                             {
                                 //black wins
-                                let _ = stamp(col: -1, parent: board)
+                                let _ = Stamp(col: -1, parent: board)
                             }
                             else
                             {
                                 //white wins
-                                let _ = stamp(col: 1, parent: board)
+                                let _ = Stamp(col: 1, parent: board)
                             }
                         }
                     }

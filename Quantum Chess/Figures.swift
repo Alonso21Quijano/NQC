@@ -9,7 +9,7 @@
 import SpriteKit
 
 
-class rect: SKSpriteNode
+class Rect: SKSpriteNode
 {
     convenience init(color: UIColor, width: CGFloat, height: CGFloat)
     {
@@ -27,7 +27,7 @@ class rect: SKSpriteNode
     }
 }
 
-class stamp:SKSpriteNode
+class Stamp:SKSpriteNode
 {
     convenience init(col: Int, parent: Board)
     {
@@ -253,44 +253,12 @@ class Figure: SKSpriteNode
                     {
                         parent.boards = parent.boards.filter {$0 !== board}
                     }
-                    self.run(SKAction.move(by: CGVector(dx: move_x,dy: move_y), duration: 0.1))
-                    if has_castle_conflict //if the move is castle
-                    {
-                        if dx == 2
-                        {
-                            (parent.showboard.figs[7][y] as! Figure).run(SKAction.move(by: CGVector(dx: -2 * parent.CellSize,dy: 0), duration: 0.1))
-                            (parent.showboard.figs[7][y] as! Figure).x -= 2
-                            parent.showboard.set(i: x, j: y, val: parent.showboard.figs[7][y])
-                        }
-                        else
-                        {
-                            (parent.showboard.figs[0][y] as! Figure).run(SKAction.move(by: CGVector(dx: 3 * parent.CellSize,dy: 0), duration: 0.1))
-                            (parent.showboard.figs[0][y] as! Figure).x += 3
-                            parent.showboard.set(i: x, j: y, val: parent.showboard.figs[0][y])
-                        }
-                    }
-                    parent.showboard.set(i: x, j: y, val: self)
+                    AcceptMove(move_x: move_x, move_y: move_y, has_castle_conflict: has_castle_conflict, parent: parent)
                 }
             }
             else
             {
-                self.run(SKAction.move(by: CGVector(dx: move_x,dy: move_y), duration: 0.1))
-                parent.showboard.set(i: x, j: y, val: self)
-                if has_castle_conflict //if the move is castle
-                {
-                    if dx == 2
-                    {
-                        (parent.showboard.figs[7][y] as! Figure).run(SKAction.move(by: CGVector(dx: -2 * parent.CellSize,dy: 0), duration: 0.1))
-                        (parent.showboard.figs[7][y] as! Figure).x -= 2
-                        parent.showboard.set(i: x-1, j: y, val: parent.showboard.figs[7][y])
-                    }
-                    else
-                    {
-                        (parent.showboard.figs[0][y] as! Figure).run(SKAction.move(by: CGVector(dx: 3 * parent.CellSize,dy: 0), duration: 0.1))
-                        (parent.showboard.figs[0][y] as! Figure).x += 3
-                        parent.showboard.set(i: x+1, j: y, val: parent.showboard.figs[0][y])
-                    }
-                }
+                AcceptMove(move_x: move_x, move_y: move_y, has_castle_conflict: has_castle_conflict, parent: parent)
             }
             if !did_blocked
             {
@@ -313,6 +281,32 @@ class Figure: SKSpriteNode
         return did_moved
     }
     
+    func AcceptMove(move_x: CGFloat, move_y: CGFloat, has_castle_conflict: Bool, parent: Board)
+    {
+        self.run(SKAction.move(by: CGVector(dx: move_x,dy: move_y), duration: 0.1))
+        if has_castle_conflict //if the move is castle
+        {
+            if move_x > 0
+            {
+                (parent.showboard.figs[7][y] as! Figure).run(SKAction.move(by: CGVector(dx: -2 * parent.CellSize,dy: 0), duration: 0.1))
+                (parent.showboard.figs[7][y] as! Figure).x -= 2
+                parent.showboard.set(i: x, j: y, val: parent.showboard.figs[7][y])
+            }
+            else
+            {
+                (parent.showboard.figs[0][y] as! Figure).run(SKAction.move(by: CGVector(dx: 3 * parent.CellSize,dy: 0), duration: 0.1))
+                (parent.showboard.figs[0][y] as! Figure).x += 3
+                parent.showboard.set(i: x, j: y, val: parent.showboard.figs[0][y])
+            }
+        }
+        parent.showboard.set(i: x, j: y, val: self)
+        if abs(self.ID) < 9 && (self.y == 7 || self.y == 0)   //if pawn reach the end of the desk
+        {
+            parent.choice(pawn: self as! Pawn)
+        }
+    }
+    
+    
     func put(ParentNode: Board, position: int2, boards: [quant_board]){
         ParentNode.addChild(self)
         x = Int(position[0])
@@ -328,7 +322,10 @@ class Figure: SKSpriteNode
         {
             board.set(i: Int(position[0]), j: Int(position[1]), val: g_col) //Ставим фигуру на досках указнных в массивах
         }
-        ParentNode.showboard.set(i: Int(position[0]), j: Int(position[1]), val: self)
+        if self.ID != 0
+        {
+            ParentNode.showboard.set(i: Int(position[0]), j: Int(position[1]), val: self)
+        }
     }
 }
 
