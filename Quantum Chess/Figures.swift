@@ -57,7 +57,7 @@ class Figure: SKSpriteNode
     
     var g_col: Int = 0 //color. Don't remember what "g_" means
     
-    func CorrMoves(start_x: Int, start_y: Int, board: quant_board) -> [[Int]]
+    func CorrMoves(start_x: Int, start_y: Int, board: quant_board, recurcive: Bool = false) -> [[Int]]
     {
         var goodMoves:[[Int]] = []
         for i in -8...8 {
@@ -72,12 +72,24 @@ class Figure: SKSpriteNode
                 }
             }
         }
-        return goodMoves
+        
+        var googQuantumMoves: [[Int]] = []
+        if isQuantumMove() && !recurcive {
+            for move in goodMoves {
+                var rawMoves = CorrMoves(start_x: x + move[0], start_y: y + move[1], board: board, recurcive: true)
+                for i in rawMoves.indices {
+                    rawMoves[i][0] += move[0]
+                    rawMoves[i][1] += move[1]
+                }
+                googQuantumMoves += rawMoves
+            }
+        }
+        return goodMoves + googQuantumMoves
     } //function to check if you move figure correctly
     func CorrMoveConditions(start_x: Int, start_y: Int,
                               dx: Int, dy: Int, board: quant_board) -> Bool {return true}
     var touched = 0 //let understand if we heck or unchek figure
-    let image_inc: CGFloat = 1.4
+    let scale: CGFloat = 1.4
     var x: Int = 0 //position
     var y: Int = 0 //position
     var ID: Int = 0 //need for understanding when conflict appears
@@ -91,7 +103,7 @@ class Figure: SKSpriteNode
     {
         if touched == 0
         {
-            self.size = CGSize(width: self.size.width * image_inc, height: self.size.height * image_inc)
+            self.size = CGSize(width: self.size.width * scale, height: self.size.height * scale)
             touched = 1
         }
         else if touched == 1
@@ -353,10 +365,10 @@ class King: Figure
         if (abs(dx) == 2)&&(dy == 0)&&(!board.king_move[g_col == 1 ? 1 : 0])&&(dx > 0 && !board.r_rook_move[g_col == 1 ? 1 : 0] || dx<0 && !board.l_rook_move[g_col == 1 ? 1 : 0]) //castle
         {
             let sign =  dx > 0 ? 1 : -1
-            var ch_x = x + sign
+            var ch_x = start_x + sign
             while ch_x != 0 &&  ch_x != 7
             {
-                if board.board[ch_x][y] != 0
+                if board.board[ch_x][start_y] != 0
                 {return false}
                 ch_x += sign
             }
@@ -389,7 +401,7 @@ class Queen: Figure
         {
             for i in 1 ..< d
             {
-                if board.board[x + i*kx][y + i*ky] != 0
+                if board.board[start_x + i*kx][start_y + i*ky] != 0
                 {return false}
             }
         }
@@ -419,7 +431,7 @@ class Rook: Figure
         {
             for i in 1 ..< d
             {
-                if board.board[x + i*kx][y + i*ky] != 0
+                if board.board[start_x + i*kx][start_y + i*ky] != 0
                 {return false}
             }
         }
@@ -448,7 +460,7 @@ class Bishop: Figure
         {
             for i in 1 ..< d
             {
-                if board.board[x + i*kx][y + i*ky] != 0
+                if board.board[start_x + i*kx][start_y + i*ky] != 0
                 {return false}
             }
         }
@@ -472,7 +484,7 @@ class Pawn: Figure
     
     override func CorrMoveConditions(start_x: Int, start_y: Int, dx: Int, dy: Int, board: quant_board) -> Bool {
         //more crocodiles to the God of crocodiles!
-        return dy == g_col && dx == 0 && board.board[x][y + g_col] == 0 || 1 == abs(dx) && dy == g_col && board.board[x + dx][y + dy] == -g_col || dy == 2*g_col && dx == 0 && y == ((g_col == 1) ? 1 : 6)
+        return dy == g_col && dx == 0 && board.board[start_x][start_y + g_col] == 0 || 1 == abs(dx) && dy == g_col && board.board[start_x + dx][start_y + dy] == -g_col || dy == 2*g_col && dx == 0 && start_y == ((g_col == 1) ? 1 : 6)
     }
     override func onDoubleTap() {}
 }
