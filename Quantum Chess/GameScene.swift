@@ -47,7 +47,7 @@ class GameScene: SKScene
                     if let node = touchedNode
                     {
                         smb_touched = !smb_touched //IMPORTANT!!! DO NOT MAKE TRUE IN CASE YOU'VE MISSED
-                        node.onTap()
+                        node.onTap(parent: board)
                     }
                 }
                 else

@@ -69,7 +69,7 @@ class Figure: SKSpriteNode
         return self.colorBlendFactor == 0.5
     }
     
-    func onTap()
+    func onTap(parent: Board)
     {
         if touched == 0
         {
@@ -78,13 +78,13 @@ class Figure: SKSpriteNode
         }
         else if touched == 1
         {
-            self.size = CGSize(width: 0.05, height: 0.05)
+            self.size = CGSize(width: parent.CellSize, height: parent.CellSize)
             touched = 0
         }
         else if touched == 2
         {
             self.colorBlendFactor = 0
-            self.size = CGSize(width: 0.05, height: 0.05)
+            self.size = CGSize(width: parent.CellSize, height: parent.CellSize)
             touched = 0
         }
     }
@@ -202,7 +202,7 @@ class Figure: SKSpriteNode
         }
         if did_moved
         {
-            onTap()
+            onTap(parent: parent)
             if conflict.count != 0
             {
                 let conflict_solution = (Int(arc4random_uniform(UInt32(passed.count + conflict.count) + 1)) > passed.count) //True -- you loose (opponents figure saved)
@@ -299,7 +299,7 @@ class Figure: SKSpriteNode
 }
 
 
-class horse: Figure
+class Horse: Figure
 {
     required convenience init(col: Int, set_ID: Int)
     {
@@ -316,7 +316,7 @@ class horse: Figure
 }
 
 
-class king: Figure
+class King: Figure
 {
     required convenience init(col: Int, set_ID: Int)
     {
@@ -345,7 +345,7 @@ class king: Figure
 }
 
 
-class queen: Figure
+class Queen: Figure
 {
     required convenience init(col: Int, set_ID: Int)
     {
@@ -376,7 +376,7 @@ class queen: Figure
 }
 
 
-class rook: Figure
+class Rook: Figure
 {
     required convenience init(col: Int, set_ID: Int)
     {
@@ -405,7 +405,7 @@ class rook: Figure
     }
 }
 
-class bishop: Figure
+class Bishop: Figure
 {
     required convenience init(col: Int, set_ID: Int)
     {
@@ -435,7 +435,7 @@ class bishop: Figure
 }
 
 
-class pawn: Figure
+class Pawn: Figure
 {
     required convenience init(col: Int, set_ID: Int)
     {

@@ -128,51 +128,51 @@ class Board: SKSpriteNode
         // SHOULD YOU IGNORE MERGERING FIGURES OF THE SAME TYPE IF THEY WERE NOT EQUIALENT EQUIVALENT AT THE BEGINING???
         
         //pawns
-        var w_pawn: [pawn] = []
-        var b_pawn: [pawn] = []
+        var w_pawn: [Pawn] = []
+        var b_pawn: [Pawn] = []
         for i in 0...7
         {
-            w_pawn.append(pawn(col: 1, set_ID: i+1))
+            w_pawn.append(Pawn(col: 1, set_ID: i+1))
             w_pawn[i].put(ParentNode: self, position: [Int32(i), 1], boards: self.boards)
-            b_pawn.append(pawn(col: -1, set_ID: -i+1))
+            b_pawn.append(Pawn(col: -1, set_ID: -i+1))
             b_pawn[i].put(ParentNode: self, position: [Int32(i), 6], boards: self.boards)
         }
         //rooks
-        let w_rook_1 = rook(col: 1, set_ID: 9)
+        let w_rook_1 = Rook(col: 1, set_ID: 9)
         w_rook_1.put(ParentNode: self, position: [0, 0], boards: self.boards)
-        let w_rook_2 = rook(col: 1, set_ID: 10)
+        let w_rook_2 = Rook(col: 1, set_ID: 10)
         w_rook_2.put(ParentNode: self, position: [7, 0], boards: self.boards)
-        let b_rook_1 = rook(col: -1, set_ID: -9)
+        let b_rook_1 = Rook(col: -1, set_ID: -9)
         b_rook_1.put(ParentNode: self, position: [0, 7], boards: self.boards)
-        let b_rook_2 = rook(col: -1, set_ID: -10)
+        let b_rook_2 = Rook(col: -1, set_ID: -10)
         b_rook_2.put(ParentNode: self, position: [7, 7], boards: self.boards)
         //horses
-        let w_horse_1 = horse(col: 1, set_ID: 11)
+        let w_horse_1 = Horse(col: 1, set_ID: 11)
         w_horse_1.put(ParentNode: self, position: [1, 0], boards: self.boards)
-        let w_horse_2 = horse(col: 1, set_ID: 12)
+        let w_horse_2 = Horse(col: 1, set_ID: 12)
         w_horse_2.put(ParentNode: self, position: [6, 0], boards: self.boards)
-        let b_horse_1 = horse(col: -1, set_ID: -11)
+        let b_horse_1 = Horse(col: -1, set_ID: -11)
         b_horse_1.put(ParentNode: self, position: [1, 7], boards: self.boards)
-        let b_horse_2 = horse(col: -1, set_ID: -12)
+        let b_horse_2 = Horse(col: -1, set_ID: -12)
         b_horse_2.put(ParentNode: self, position: [6, 7], boards: self.boards)
         //bishops
-        let w_bishop_1 = bishop(col: 1, set_ID: 13)
+        let w_bishop_1 = Bishop(col: 1, set_ID: 13)
         w_bishop_1.put(ParentNode: self, position: [2, 0], boards: self.boards)
-        let w_bishop_2 = bishop(col: 1, set_ID: 14)
+        let w_bishop_2 = Bishop(col: 1, set_ID: 14)
         w_bishop_2.put(ParentNode: self, position: [5, 0], boards: self.boards)
-        let b_bishop_1 = bishop(col: -1, set_ID: -13)
+        let b_bishop_1 = Bishop(col: -1, set_ID: -13)
         b_bishop_1.put(ParentNode: self, position: [2, 7], boards: self.boards)
-        let b_bishop_2 = bishop(col: -1, set_ID: -14)
+        let b_bishop_2 = Bishop(col: -1, set_ID: -14)
         b_bishop_2.put(ParentNode: self, position: [5, 7], boards: self.boards)
         //queens
-        let w_queen = queen(col: 1, set_ID: 15)
+        let w_queen = Queen(col: 1, set_ID: 15)
         w_queen.put(ParentNode: self, position: [3, 0], boards: self.boards)
-        let b_queen = queen(col: -1, set_ID: -15)
+        let b_queen = Queen(col: -1, set_ID: -15)
         b_queen.put(ParentNode: self, position: [3, 7], boards: self.boards)
         //king
-        let w_king = king(col: 1, set_ID: 16)
+        let w_king = King(col: 1, set_ID: 16)
         w_king.put(ParentNode: self, position: [4, 0], boards: self.boards)
-        let b_king = king(col: -1, set_ID: -16)
+        let b_king = King(col: -1, set_ID: -16)
         b_king.put(ParentNode: self, position: [4, 7], boards: self.boards)
         
     }
