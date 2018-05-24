@@ -145,6 +145,7 @@ class Board: SKSpriteNode
     var boards: [quant_board] = [quant_board()]
     var choice_time: Bool = false
     var transformingPawn: Pawn? = nil
+    var buttons: [Button] = []
     
     func create(ParentNode: SKNode)
     {
@@ -154,6 +155,9 @@ class Board: SKSpriteNode
         self.CellSize =  1 / 9 * size.width
         self.boundSize = 1 / 18 * size.width
         self.zPosition = -1 //Will it prevent figures from hiding?
+        
+        buttons.append(Button(parent: self, col: 1))
+        buttons.append(Button(parent: self, col: -1))
         
         // THINK ABOUT "Friend conflict" WHEN YOU PUT THE FIGURE ON THE FIGURE OF YOUR COLOR
         // SHOULD YOU CONTROL THIS CONFLICT
@@ -226,5 +230,46 @@ class Board: SKSpriteNode
     {
         transformingPawn?.removeFromParent()
         choice_time = false
+    }
+}
+
+class Button: SKSpriteNode
+{
+    var bCol: Int = 1
+    convenience init(parent: Board, col: Int)
+    {
+        self.init(imageNamed: col == 1 ? "capitulate_active" : "capitulate_inactive")
+        parent.addChild(self)
+        self.size = CGSize(width: 0.32 * Double(col), height: 0.08 * Double(col))
+        bCol = col
+        self.position = CGPoint(x: 0, y: -0.4 * Double(col))
+    }
+    func switcher(turn: Int)
+    {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){ //make code a bit later
+            if turn == self.bCol
+            {
+                self.texture = SKTexture(imageNamed: "capitulate_active")
+            }
+            else
+            {
+                self.texture = SKTexture(imageNamed: "capitulate_inactive")
+            }
+        }
+    }
+    func onTap(parent: Board, turn: Int) -> Bool
+    {
+        if bCol == turn
+        {
+            for board in parent.boards
+            {
+                if board.win == 0
+                {
+                    board.win = -turn
+                }
+            }
+            return true
+        }
+        return false
     }
 }

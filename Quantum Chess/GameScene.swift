@@ -42,6 +42,10 @@ class GameScene: SKScene
                 touchedNode = nil
                 smb_touched = false
             }
+            if Node is Button && (Node as! Button).onTap(parent: board, turn: turn)
+            {
+                winner()
+            }
             let TapNode = Node as? Figure
             if board.choice_time
             {
@@ -107,21 +111,12 @@ class GameScene: SKScene
                     {
                         smb_touched = !smb_touched
                         turn = -turn
-                        touchedNode = nil
-                        if board.showboard.check(boards: board.boards)
+                        for bump in board.buttons
                         {
-                            smb_touched = true
-                            if board.boards[Int(arc4random_uniform(UInt32(board.boards.count)))].win == -1
-                            {
-                                //black wins
-                                let _ = Stamp(col: -1, parent: board)
-                            }
-                            else
-                            {
-                                //white wins
-                                let _ = Stamp(col: 1, parent: board)
-                            }
+                            bump.switcher(turn: turn)
                         }
+                        touchedNode = nil
+                        smb_touched = winner()
                     }
                 }
             }
@@ -137,6 +132,26 @@ class GameScene: SKScene
                 }
             }
         }
+    }
+    
+    func winner() -> Bool
+    {
+        if board.showboard.check(boards: board.boards)
+        {
+            if board.boards[Int(arc4random_uniform(UInt32(board.boards.count)))].win == -1
+            {
+                //black wins
+                let _ = Stamp(col: -1, parent: board)
+                return true
+            }
+            else
+            {
+                //white wins
+                let _ = Stamp(col: 1, parent: board)
+                return true
+            }
+        }
+        return false
     }
 }
 

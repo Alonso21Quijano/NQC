@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		120D478820A62CF900BEDEDF /* Boards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 120D478720A62CF900BEDEDF /* Boards.swift */; };
+		121ED37620B62F9F0030F733 /* capitulate_inactive.png in Resources */ = {isa = PBXBuildFile; fileRef = 121ED37420B62F9E0030F733 /* capitulate_inactive.png */; };
+		121ED37720B62F9F0030F733 /* capitulate_active.png in Resources */ = {isa = PBXBuildFile; fileRef = 121ED37520B62F9E0030F733 /* capitulate_active.png */; };
 		12281631209B53E8009C3E63 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12281630209B53E8009C3E63 /* AppDelegate.swift */; };
 		12281635209B53E8009C3E63 /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = 12281634209B53E8009C3E63 /* Actions.sks */; };
 		12281637209B53E8009C3E63 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12281636209B53E8009C3E63 /* GameScene.swift */; };
@@ -55,6 +57,8 @@
 
 /* Begin PBXFileReference section */
 		120D478720A62CF900BEDEDF /* Boards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Boards.swift; sourceTree = "<group>"; };
+		121ED37420B62F9E0030F733 /* capitulate_inactive.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = capitulate_inactive.png; sourceTree = "<group>"; };
+		121ED37520B62F9E0030F733 /* capitulate_active.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = capitulate_active.png; sourceTree = "<group>"; };
 		1228162D209B53E8009C3E63 /* Quantum Chess.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Quantum Chess.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		12281630209B53E8009C3E63 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		12281634209B53E8009C3E63 /* Actions.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Actions.sks; sourceTree = "<group>"; };
@@ -137,6 +141,8 @@
 		1228162F209B53E8009C3E63 /* Quantum Chess */ = {
 			isa = PBXGroup;
 			children = (
+				121ED37520B62F9E0030F733 /* capitulate_active.png */,
+				121ED37420B62F9E0030F733 /* capitulate_inactive.png */,
 				122D744220A648D500EED457 /* b_win.png */,
 				122D744120A648D500EED457 /* w_win.png */,
 				1228168B209B555F009C3E63 /* b_bishop.png */,
@@ -293,11 +299,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				12281697209B5560009C3E63 /* w_horse.png in Resources */,
+				121ED37620B62F9F0030F733 /* capitulate_inactive.png in Resources */,
 				1228163C209B53E8009C3E63 /* Main.storyboard in Resources */,
 				12281699209B5560009C3E63 /* b_bishop.png in Resources */,
 				1228169C209B5560009C3E63 /* TestBoard.png in Resources */,
 				1228163E209B53E8009C3E63 /* Assets.xcassets in Resources */,
 				12281641209B53E8009C3E63 /* LaunchScreen.storyboard in Resources */,
+				121ED37720B62F9F0030F733 /* capitulate_active.png in Resources */,
 				1228169D209B5560009C3E63 /* w_bishop.png in Resources */,
 				12281693209B5560009C3E63 /* w_pawn.png in Resources */,
 				12281698209B5560009C3E63 /* w_king.png in Resources */,
