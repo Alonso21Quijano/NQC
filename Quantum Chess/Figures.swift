@@ -185,14 +185,10 @@ class Figure: SKSpriteNode
             if board.board[x][y] != 0
             {
                 if CorrMoves(start_x: x, start_y: y, board: board).contains(where: {$0 == [Int(dx), Int(dy)]}) && (!has_castle_conflict || (parent.showboard.figs[dx > 0 ? 7: 0][y] as! Figure).ID == g_col * (dx > 0 ?  10 : 9))
-                //I ❤️ crocodiles
+                //I ❤️ crocodiles 🐊
                 {
                     if isQuantumMove() { //we add board only if the move is possible
                         additionalQuantumBords.append(board.copy())
-                    }
-                    if abs(self.ID) <= 8 && dy == 2
-                    {
-                        (self as! Pawn).start_jump = true
                     }
                     if let del_ind = conflict.index(where: {$0 === board})
                     {
@@ -512,7 +508,6 @@ class Bishop: Figure
 
 class Pawn: Figure
 {
-    var start_jump = false
     required convenience init(col: Int, set_ID: Int)
     {
         if col == 1

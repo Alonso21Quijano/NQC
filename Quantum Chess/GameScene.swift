@@ -111,6 +111,7 @@ class GameScene: SKScene
                     {
                         smb_touched = !smb_touched
                         turn = -turn
+                        board.movesCount += 1
                         for bump in board.buttons
                         {
                             bump.switcher(turn: turn)

@@ -146,6 +146,7 @@ class Board: SKSpriteNode
     var choice_time: Bool = false
     var transformingPawn: Pawn? = nil
     var buttons: [Button] = []
+    var movesCount = 0
     
     func create(ParentNode: SKNode)
     {
